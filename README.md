@@ -45,7 +45,7 @@ For more details, see the [PySpark README](./PySpark/README.md).
 
 1. Clone this repository:
    ```
-   git clone <repository-url>
+   git clone https://github.com/bandaralmuraykhi/DSC473-BigDataCourse
    ```
 
 2. Navigate to the desired directory (Hadoop or PySpark)
