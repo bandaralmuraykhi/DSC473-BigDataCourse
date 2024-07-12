@@ -1,0 +1,84 @@
+services:
+  namenode:
+    image: apache/hadoop:3.3.6
+    hostname: namenode
+    ports:
+      - 9870:9870
+    env_file:
+      - ./config
+    environment:
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+      HADOOP_HOME: /opt/hadoop
+    command: |
+      bash -c "
+        export HADOOP_HOME=/opt/hadoop &&
+        echo '<configuration>
+        <property><name>yarn.app.mapreduce.am.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        <property><name>mapreduce.map.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        <property><name>mapreduce.reduce.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        </configuration>' > /opt/hadoop/etc/hadoop/mapred-site.xml &&
+        hdfs namenode
+      "
+    volumes:
+      - ./hadoop_data:/opt/hadoop/hadoop_data
+
+  datanode:
+    image: apache/hadoop:3.3.6
+    env_file:
+      - ./config
+    environment:
+      HADOOP_HOME: /opt/hadoop
+    command: |
+      bash -c "
+        export HADOOP_HOME=/opt/hadoop &&
+        echo '<configuration>
+        <property><name>yarn.app.mapreduce.am.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        <property><name>mapreduce.map.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        <property><name>mapreduce.reduce.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        </configuration>' > /opt/hadoop/etc/hadoop/mapred-site.xml &&
+        hdfs datanode
+      "
+    volumes:
+      - ./hadoop_data:/opt/hadoop/hadoop_data
+
+  resourcemanager:
+    image: apache/hadoop:3.3.6
+    hostname: resourcemanager
+    ports:
+      - 8088:8088
+    env_file:
+      - ./config
+    environment:
+      HADOOP_HOME: /opt/hadoop
+    volumes:
+      - ./test.sh:/opt/test.sh
+      - ./hadoop_data:/opt/hadoop/hadoop_data
+    command: |
+      bash -c "
+        export HADOOP_HOME=/opt/hadoop &&
+        echo '<configuration>
+        <property><name>yarn.app.mapreduce.am.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        <property><name>mapreduce.map.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        <property><name>mapreduce.reduce.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        </configuration>' > /opt/hadoop/etc/hadoop/mapred-site.xml &&
+        yarn resourcemanager
+      "
+
+  nodemanager:
+    image: apache/hadoop:3.3.6
+    env_file:
+      - ./config
+    environment:
+      HADOOP_HOME: /opt/hadoop
+    command: |
+      bash -c "
+        export HADOOP_HOME=/opt/hadoop &&
+        echo '<configuration>
+        <property><name>yarn.app.mapreduce.am.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        <property><name>mapreduce.map.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        <property><name>mapreduce.reduce.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
+        </configuration>' > /opt/hadoop/etc/hadoop/mapred-site.xml &&
+        yarn nodemanager
+      "
+    volumes:
+      - ./hadoop_data:/opt/hadoop/hadoop_data
