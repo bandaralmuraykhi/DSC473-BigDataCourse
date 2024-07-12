@@ -1,0 +1,106 @@
+# .gitignore for Hadoop and PySpark project
+
+# Hadoop specific
+*.log
+*.log.*
+*.txt.crc
+_SUCCESS
+.Trash-*
+
+# PySpark specific
+*.pyc
+*.pyo
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Virtual environment
+venv/
+env/
+.env
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Hadoop data files (uncomment if you don't want to track these)
+# /Hadoop/hadoop_data/*
+
+# Docker volumes
+# Uncomment the following line if you don't want to track the contents of docker volumes
+# **/hadoop_data/*
+
+# Compiled Java classes
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Maven specific
+target/
+
+# Gradle specific
+.gradle/
+build/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# PyDev specific (Python IDE for Eclipse)
+*.pydevproject
+
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+
+# PDT-specific (PHP Development Tools)
+.buildpath
+
+# TeXlipse plugin
+.texlipse
+
+# SBT (Scala Build Tool)
+.cache
+.history
+.lib/
+dist/*
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+
+# Uncomment this line if you wish to ignore the project description file
+# Typically, this file would be tracked if it contains build/dependency configurations:
+#.project
