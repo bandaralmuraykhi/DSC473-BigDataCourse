@@ -31,32 +31,25 @@ For detailed installation instructions, refer to the following guides:
 
 Follow these steps to set up the Hadoop environment using Docker:
 
-1. Clone the repository:
-   - Open a terminal or command prompt.
-   - Run the following command to clone the repository containing the Hadoop Docker setup:
+1. Start the Hadoop cluster:
+   - Navigate to Hadoop directory:
      ```bash
-     git clone <repository-url>
+     cd Hadoop
      ```
-   - Navigate to the cloned repository directory:
-     ```bash
-     cd <repository-directory>
-     ```
-
-2. Start the Hadoop cluster:
    - In the terminal, run the following command to start the Hadoop cluster using Docker Compose:
      ```bash
      docker compose up -d
      ```
    - This command will download the necessary Docker images and start the Hadoop containers in detached mode (`-d` flag).
 
-3. Verify the containers are running:
+2. Verify the containers are running:
    - To check the status of the running containers, use the following command:
      ```bash
      docker compose ps
      ```
    - This command will display a list of the running containers, including their names, states, and ports.
 
-4. Stopping the cluster:
+3. Stopping the cluster:
    - When you're done using the Hadoop cluster, you can stop it using the following command:
      ```bash
      docker compose down
