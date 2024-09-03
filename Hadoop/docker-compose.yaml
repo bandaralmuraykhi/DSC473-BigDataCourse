@@ -9,6 +9,9 @@ services:
     environment:
       ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
       HADOOP_HOME: /opt/hadoop
+      HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
+    volumes:
+      - ./hadoop_data:/opt/hadoop/hadoop_data
     command: |
       bash -c "
         export HADOOP_HOME=/opt/hadoop &&
@@ -17,17 +20,20 @@ services:
         <property><name>mapreduce.map.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
         <property><name>mapreduce.reduce.env</name><value>HADOOP_MAPRED_HOME=/opt/hadoop</value></property>
         </configuration>' > /opt/hadoop/etc/hadoop/mapred-site.xml &&
+        hdfs namenode -format &&
         hdfs namenode
       "
-    volumes:
-      - ./hadoop_data:/opt/hadoop/hadoop_data
 
   datanode:
     image: apache/hadoop:3.3.6
+    hostname: datanode
     env_file:
       - ./config
     environment:
       HADOOP_HOME: /opt/hadoop
+      HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
+    volumes:
+      - ./hadoop_data:/opt/hadoop/hadoop_data
     command: |
       bash -c "
         export HADOOP_HOME=/opt/hadoop &&
@@ -38,8 +44,6 @@ services:
         </configuration>' > /opt/hadoop/etc/hadoop/mapred-site.xml &&
         hdfs datanode
       "
-    volumes:
-      - ./hadoop_data:/opt/hadoop/hadoop_data
 
   resourcemanager:
     image: apache/hadoop:3.3.6
@@ -50,9 +54,10 @@ services:
       - ./config
     environment:
       HADOOP_HOME: /opt/hadoop
+      HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
     volumes:
-      - ./test.sh:/opt/test.sh
       - ./hadoop_data:/opt/hadoop/hadoop_data
+      - ./test.sh:/opt/test.sh
     command: |
       bash -c "
         export HADOOP_HOME=/opt/hadoop &&
@@ -66,10 +71,14 @@ services:
 
   nodemanager:
     image: apache/hadoop:3.3.6
+    hostname: nodemanager
     env_file:
       - ./config
     environment:
       HADOOP_HOME: /opt/hadoop
+      HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
+    volumes:
+      - ./hadoop_data:/opt/hadoop/hadoop_data
     command: |
       bash -c "
         export HADOOP_HOME=/opt/hadoop &&
@@ -80,5 +89,4 @@ services:
         </configuration>' > /opt/hadoop/etc/hadoop/mapred-site.xml &&
         yarn nodemanager
       "
-    volumes:
-      - ./hadoop_data:/opt/hadoop/hadoop_data
+      
