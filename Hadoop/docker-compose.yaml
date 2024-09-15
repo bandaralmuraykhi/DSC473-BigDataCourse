@@ -1,5 +1,6 @@
 services:
   namenode:
+    platform: linux/amd64
     image: apache/hadoop:3.3.6
     hostname: namenode
     ports:
@@ -11,7 +12,7 @@ services:
       HADOOP_HOME: /opt/hadoop
       HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
     volumes:
-      - ./hadoop_data:/opt/hadoop/hadoop_data
+      - ./shared_dir:/shared_dir
     command: |
       bash -c "
         export HADOOP_HOME=/opt/hadoop &&
@@ -25,6 +26,7 @@ services:
       "
 
   datanode:
+    platform: linux/amd64
     image: apache/hadoop:3.3.6
     hostname: datanode
     env_file:
@@ -33,7 +35,7 @@ services:
       HADOOP_HOME: /opt/hadoop
       HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
     volumes:
-      - ./hadoop_data:/opt/hadoop/hadoop_data
+      - ./shared_dir:/shared_dir
     command: |
       bash -c "
         export HADOOP_HOME=/opt/hadoop &&
@@ -46,6 +48,7 @@ services:
       "
 
   resourcemanager:
+    platform: linux/amd64
     image: apache/hadoop:3.3.6
     hostname: resourcemanager
     ports:
@@ -56,7 +59,7 @@ services:
       HADOOP_HOME: /opt/hadoop
       HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
     volumes:
-      - ./hadoop_data:/opt/hadoop/hadoop_data
+      - ./shared_dir:/shared_dir
       - ./test.sh:/opt/test.sh
     command: |
       bash -c "
@@ -70,6 +73,7 @@ services:
       "
 
   nodemanager:
+    platform: linux/amd64
     image: apache/hadoop:3.3.6
     hostname: nodemanager
     env_file:
@@ -78,7 +82,7 @@ services:
       HADOOP_HOME: /opt/hadoop
       HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
     volumes:
-      - ./hadoop_data:/opt/hadoop/hadoop_data
+      - ./shared_dir:/shared_dir
     command: |
       bash -c "
         export HADOOP_HOME=/opt/hadoop &&
@@ -89,4 +93,15 @@ services:
         </configuration>' > /opt/hadoop/etc/hadoop/mapred-site.xml &&
         yarn nodemanager
       "
-      
+
+  java:
+    platform: linux/amd64
+    image: openjdk:8-jdk-alpine
+    hostname: java
+    volumes:
+      - ./shared_dir:/shared_dir
+    command: |
+      sh -c "apk add --no-cache bash && tail -f /dev/null"
+
+volumes:
+  shared-volume:
