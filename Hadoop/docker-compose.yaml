@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   namenode:
     platform: linux/amd64
@@ -13,6 +15,7 @@ services:
       HADOOP_CONF_DIR: "/opt/hadoop/etc/hadoop"
     volumes:
       - "./hadoop_data:/opt/hadoop/hadoop_data"
+      - "./shared_dir:/shared_dir"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9870 || exit 1"]
       interval: 30s
@@ -48,6 +51,7 @@ services:
       HADOOP_CONF_DIR: "/opt/hadoop/etc/hadoop"
     volumes:
       - "./hadoop_data:/opt/hadoop/hadoop_data"
+      - "./shared_dir:/shared_dir"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://namenode:9870 || exit 1"]
       interval: 30s
@@ -87,6 +91,7 @@ services:
     volumes:
       - "./hadoop_data:/opt/hadoop/hadoop_data"
       - "./test.sh:/opt/test.sh"
+      - "./shared_dir:/shared_dir"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://resourcemanager:8088/cluster/cluster || exit 1"]
       interval: 30s
@@ -121,6 +126,7 @@ services:
       HADOOP_CONF_DIR: "/opt/hadoop/etc/hadoop"
     volumes:
       - "./hadoop_data:/opt/hadoop/hadoop_data"
+      - "./shared_dir:/shared_dir"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://resourcemanager:8088/cluster/cluster || exit 1"]
       interval: 30s
@@ -147,8 +153,10 @@ services:
     hostname: java
     volumes:
       - "./hadoop_data:/opt/hadoop/hadoop_data"
+      - "./shared_dir:/shared_dir"
     command: >
       sh -c "apk add --no-cache bash && tail -f /dev/null"
 
 volumes:
   hadoop_data:
+  shared_dir:
