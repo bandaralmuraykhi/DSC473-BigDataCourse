@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   namenode:
     platform: linux/amd64
@@ -155,7 +153,14 @@ services:
       - "./hadoop_data:/opt/hadoop/hadoop_data"
       - "./shared_dir:/shared_dir"
     command: >
-      sh -c "apk add --no-cache bash && tail -f /dev/null"
+      sh -c "yum install -y bash &&
+             sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Base.repo &&
+             sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Base.repo &&
+             yum clean all &&
+             yum makecache &&
+             yum update -y &&
+             yum install -y java-devel &&
+             tail -f /dev/null"
 
 volumes:
   hadoop_data:
